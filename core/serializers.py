@@ -47,13 +47,13 @@ class AddSolicitacaoSerializer(serializers.ModelSerializer):
     def validate(self, attrs):
         EXPECTED_DIGITS = 9
 
-        if not attrs['numero'].isdigit() or len(attrs['numero']) != EXPECTED_DIGITS: 
+        if not attrs['nif'].isdigit() or len(attrs['nif']) != EXPECTED_DIGITS: 
             raise serializers.ValidationError({"NIF":"Invalido"})
 
-        soma = sum([int(dig) * (EXPECTED_DIGITS - pos) for pos, dig in enumerate(attrs['numero'])])
+        soma = sum([int(dig) * (EXPECTED_DIGITS - pos) for pos, dig in enumerate(attrs['nif'])])
         resto = soma % 11
 
-        if (attrs['numero'][-1] == '0' and resto == 1):
+        if (attrs['nif'][-1] == '0' and resto == 1):
             resto = (soma + 10) % 11
 
         # return resto == 0
