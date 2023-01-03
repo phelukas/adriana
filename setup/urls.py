@@ -11,7 +11,7 @@ urlpatterns = [
     path('users/<int:pk>', UserView.as_view()),
 
     # urls about users
-    path('solicitacoes/', SolicitacaoView.as_view()),
+    path('solicitacoes/', SolicitacaoView.as_view(), name="solicitacoes"),
     path('solicitacoes/<int:pk>', SolicitacaoView.as_view()),
 
 ]

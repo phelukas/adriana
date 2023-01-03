@@ -42,8 +42,6 @@ class AddSolicitacaoSerializer(serializers.ModelSerializer):
             'observacao'
         )
     
-    
-
     def validate(self, attrs):
         EXPECTED_DIGITS = 9
 
@@ -74,6 +72,4 @@ class SolicitacaoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Solicitacao
         fields = '__all__'
-
-
 

@@ -3,6 +3,11 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from core.models import User, Itens, Solicitacao
 from core.serializers import UserSerializer, AddUserSerializer, AddSolicitacaoSerializer, SolicitacaoSerializer
+from core.query_sql import conexao
+from django.shortcuts import get_object_or_404
+from rest_framework.renderers import TemplateHTMLRenderer
+from rest_framework.views import APIView
+from django.shortcuts import render
 
 
 class UserView(APIView):
@@ -61,6 +66,8 @@ class UserView(APIView):
 
 
 class SolicitacaoView(APIView):
+    renderer_classes = (TemplateHTMLRenderer,)
+
     def edit(self, request, pk, partial=False):
         if pk:
             self.check_pk_none(pk)
@@ -96,14 +103,18 @@ class SolicitacaoView(APIView):
 
     def get(self, request, pk=None):
         solicitacoes = Solicitacao.objects.all()
-        serializer = SolicitacaoSerializer(solicitacoes, many=True) 
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        serializer = SolicitacaoSerializer(solicitacoes, many=True)
+        return Response({'solicitacoes': serializer.data}, template_name='index.html')
 
     def post(self, request, format=None):
         serializer = AddSolicitacaoSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+        if not serializer.is_valid():
+            return Response({'form': serializer}, template_name='index.html')
+        else:
+            return Response({"..":".."} ,status=status.HTTP_201_CREATED)
+
+        # serializer.save()
+        return Response({'solicitacoes': serializer.data}, status=status.HTTP_201_CREATED)
 
     def put(self, request, pk=None, format=None):
         data, status_ = self.edit(request, pk)
